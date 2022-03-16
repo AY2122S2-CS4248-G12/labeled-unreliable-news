@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 
-from nltk import sent_tokenize, word_tokenize, TreebankWordDetokenizer
+from nltk import sent_tokenize, word_tokenize
 
 from preprocessing.case_folding import convert_to_lowercase
 from preprocessing.lemmatization import lemmatize
@@ -18,10 +18,9 @@ class Preprocessor:
     perform_lemmatization: bool = False
     perform_stemming: bool = False
 
-    def process(self, document: str) -> str:
-        detokenizer = TreebankWordDetokenizer()
-
+    def process(self, document: str) -> List[str]:
         sentences: List[str] = sent_tokenize(document)
+        all_words: List[str] = []
         for i, sentence in enumerate(sentences):
             words: List[str] = word_tokenize(sentence)
 
@@ -33,7 +32,7 @@ class Preprocessor:
                 words = stem(words)
 
             if self.perform_case_folding:
-                document = convert_to_lowercase(document)
+                words = map(convert_to_lowercase, words)
 
             if self.remove_stop_words:
                 words = remove_stop_words(words)
@@ -41,6 +40,6 @@ class Preprocessor:
             if self.remove_punctuation:
                 words = remove_punctuation(words)
 
-            sentences[i] = detokenizer.detokenize(words)
+            all_words += words
 
-        return ' '.join(sentences)
+        return all_words
