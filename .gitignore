@@ -1,0 +1,12 @@
+# IDE/Editor configuration files
+**/.idea
+**/.vscode
+
+# macOS metadata files
+**/.DS_Store
+
+# Build cache files
+**/__pycache__
+
+# Raw data - we do not commit these because they are too big + we do not own them
+raw_data/
