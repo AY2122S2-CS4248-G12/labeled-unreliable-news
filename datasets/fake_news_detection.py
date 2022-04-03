@@ -14,6 +14,7 @@ class FakeNewsDetectionDataset(Dataset):
         """Initialises the dataset from the specified raw data file & transformation functions.
 
         For simplicity, the entire dataset will be loaded into memory from the file.
+        Then, the transformation functions will be applied before storing the sentences and labels.
 
         Args:
             raw_data_file:
@@ -23,17 +24,22 @@ class FakeNewsDetectionDataset(Dataset):
             target_transform:
                 The transformation function to be run on the labels.
         """
-        self.transform = transform
-        self.target_transform = target_transform
+        self.sentences: List[Union[str, List[str]]] = []
+        self.labels: List[Union[str, int]] = []
 
-        self.sentences: List[str] = []
-        self.labels: List[str] = []
         with open(raw_data_file) as dataset:
             reader: _csv.reader = csv.reader(dataset)
             row: List[str]
             for row in reader:
-                label: str = row[0]
-                sentence: str = row[1]
+                label: Union[str, int] = row[0]
+                sentence: Union[str, List[str]] = row[1]
+
+                # Apply transformations.
+                if transform:
+                    sentence = transform(sentence)
+                if target_transform:
+                    label = target_transform(label)
+
                 self.sentences.append(sentence)
                 self.labels.append(label)
 
@@ -62,10 +68,4 @@ class FakeNewsDetectionDataset(Dataset):
         """
         sentence: Union[str, List[str]] = self.sentences[index]
         label: Union[str, int] = self.labels[index]
-
-        if self.transform:
-            sentence = self.transform(sentence)
-        if self.target_transform:
-            label = self.target_transform(label)
-
         return sentence, label
