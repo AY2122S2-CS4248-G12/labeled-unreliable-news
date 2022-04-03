@@ -7,17 +7,17 @@ from torch.utils.data import Dataset
 from datasets.utils import transform_label
 
 
-class TrainingDataset(Dataset):
-    """Represents the training dataset."""
+class FakeNewsDetectionDataset(Dataset):
+    """Represents the fake news detection dataset."""
     def __init__(self, raw_data_file: str, transform: Optional[Callable[[str], List[str]]] = None,
                  target_transform: Optional[Callable[[Union[int, str]], int]] = transform_label) -> None:
-        """Initialises the training dataset from the specified raw data file & transformation functions.
+        """Initialises the dataset from the specified raw data file & transformation functions.
 
-        For simplicity, the entire training dataset will be loaded into memory from the file.
+        For simplicity, the entire dataset will be loaded into memory from the file.
 
         Args:
             raw_data_file:
-                The CSV file containing the training dataset.
+                The CSV file containing the dataset.
             transform:
                 The transformation function to be run on the sentences.
             target_transform:
@@ -28,8 +28,8 @@ class TrainingDataset(Dataset):
 
         self.sentences: List[str] = []
         self.labels: List[str] = []
-        with open(raw_data_file) as training_dataset:
-            reader: _csv.reader = csv.reader(training_dataset)
+        with open(raw_data_file) as dataset:
+            reader: _csv.reader = csv.reader(dataset)
             row: List[str]
             for row in reader:
                 label: str = row[0]
@@ -38,10 +38,10 @@ class TrainingDataset(Dataset):
                 self.labels.append(label)
 
     def __len__(self) -> int:
-        """Returns the length of the training dataset.
+        """Returns the length of the dataset.
 
         Returns:
-            The length of the training dataset.
+            The length of the dataset.
         """
         assert len(self.sentences) == len(self.labels)
         return len(self.sentences)
