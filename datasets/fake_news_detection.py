@@ -1,6 +1,5 @@
 import _csv
 import csv
-import sys
 from typing import Callable, List, Optional, Union, Tuple
 
 from torch.utils.data import Dataset
@@ -8,7 +7,7 @@ from torch.utils.data import Dataset
 from datasets.utils import transform_label
 
 
-csv.field_size_limit(sys.maxsize)
+csv.field_size_limit(2147483647)
 
 
 class FakeNewsDetectionDataset(Dataset):
