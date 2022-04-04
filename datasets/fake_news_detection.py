@@ -1,6 +1,7 @@
 import _csv
+from collections import defaultdict, Counter
 import csv
-from typing import Callable, List, Optional, Union, Tuple
+from typing import Callable, List, Optional, Union, Tuple, Dict
 
 from torch.utils.data import Dataset
 
@@ -27,8 +28,9 @@ class FakeNewsDetectionDataset(Dataset):
             target_transform:
                 The transformation function to be run on the labels.
         """
-        self.sentences: List[Union[str, List[str]]] = []
-        self.labels: List[Union[str, int]] = []
+        self.sentences: Union[List[str], List[List[str]]] = []
+        self.labels: List[int] = []
+        self.document_frequencies: Dict[str, List[int]] = defaultdict(lambda: [0, 0, 0, 0])
 
         with open(raw_data_file) as dataset:
             reader: _csv.reader = csv.reader(dataset)
@@ -42,9 +44,15 @@ class FakeNewsDetectionDataset(Dataset):
                     sentence = transform(sentence)
                 if target_transform:
                     label = target_transform(label)
+                else:
+                    label = int(label)
 
                 self.sentences.append(sentence)
                 self.labels.append(label)
+
+                term_frequencies = Counter(sentence)
+                for key in term_frequencies.keys():
+                    self.document_frequencies[key][label] += 1
 
     def __len__(self) -> int:
         """Returns the length of the dataset.
