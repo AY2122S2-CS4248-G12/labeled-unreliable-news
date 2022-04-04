@@ -10,3 +10,6 @@
 
 # Raw data - we do not commit these because they are too big + we do not own them
 raw_data/
+
+# Trained models - we do not commit these because they are too big
+trained_models
