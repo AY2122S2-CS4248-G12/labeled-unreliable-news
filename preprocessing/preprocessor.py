@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 
+import nltk
 from nltk import sent_tokenize, word_tokenize
 
 from preprocessing.case_folding import convert_to_lowercase
@@ -9,6 +10,15 @@ from preprocessing.punctuation_removal import remove_punctuation
 from preprocessing.stemming import stem
 from preprocessing.stop_word_removal import remove_stop_words
 
+
+def download_punkt_corpora_if_not_exists() -> None:
+    try:
+        nltk.data.find('tokenizers/punkt')
+    except LookupError:
+        nltk.download('punkt')
+
+
+download_punkt_corpora_if_not_exists()
 
 @dataclass
 class Preprocessor:
