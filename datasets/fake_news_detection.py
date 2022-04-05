@@ -14,8 +14,7 @@ csv.field_size_limit(2147483647)
 class FakeNewsDetectionDataset(Dataset):
     """Represents the fake news detection dataset."""
     def __init__(self, raw_data_file: str, transform: Optional[Callable[[str], List[str]]] = None,
-                 target_transform: Callable[[Union[int, str]], int] = transform_label,
-                 trim_length: int = 0) -> None:
+                 target_transform: Callable[[Union[int, str]], int] = transform_label) -> None:
         """Initialises the dataset from the specified raw data file & transformation functions.
 
         For simplicity, the entire dataset will be loaded into memory from the file.
@@ -45,8 +44,6 @@ class FakeNewsDetectionDataset(Dataset):
                     sentence = transform(sentence)
                 label = target_transform(label)
 
-                if trim_length > 0:
-                    sentence = sentence[0:trim_length]
                 self.sentences.append(sentence)
                 self.labels.append(label)
 
