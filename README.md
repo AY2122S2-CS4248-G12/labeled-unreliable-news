@@ -1,4 +1,6 @@
-# Labeled Unreliable News
+# Prediction of News Reliability
+
+Analysis of the Labelled Unreliable News (LUN) dataset and its usefulness in training language models for fake news detection.
 
 ## Getting Started
 
@@ -10,3 +12,7 @@
    ```
 1. Download `raw_data.zip` [here](https://github.com/BUPT-GAMMA/CompareNet_FakeNewsDetection/releases/tag/dataset).
 1. Extract the files into `raw_data`.
+
+## Running the Models
+
+The Naive Bayes, simple Neural Network, and Long Short Term Memory models can be found within the `models` directory as Jupyter notebooks.
